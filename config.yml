@@ -1,0 +1,6 @@
+--- 
+configFile: configfile.txt
+connectionsDir: ./config
+connectionConfig: sample
+debugMode: false
+export: select * from dual
