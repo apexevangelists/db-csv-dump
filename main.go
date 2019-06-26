@@ -62,7 +62,7 @@ func parseFlags() {
 	flag.StringVar(&config.export, "e", "", "Table, View or SQL Query to export")
 
 	flag.BoolVar(&config.debugMode, "debug", false, "Debug mode (default=false)")
-	flag.StringVar(&config.connectionConfig, "connection", "", "Confguration file for connection")
+	flag.StringVar(&config.connectionConfig, "connection", "", "Configuration file for connection")
 
 	flag.StringVar(&connection.dbConnectionString, "db", "", "Database Connection, e.g. user/password@host:port/sid")
 
@@ -149,7 +149,14 @@ func loadConfig(configFile string) {
 	setDebug(viper.GetBool("debugMode"))
 
 	config.connectionsDir = viper.GetString("connectionsDir")
-	config.connectionConfig = viper.GetString("connectionConfig")
+
+	if viper.GetString("connectionConfig") != "" && (config.connectionConfig == "") {
+		config.connectionConfig = viper.GetString("connectionConfig")
+	}
+
+	if viper.GetString("export") != "" && (config.export == "") {
+		config.export = viper.GetString("export")
+	}
 
 	config.debugMode = viper.GetBool("debugMode")
 
@@ -175,6 +182,7 @@ func loadConnection(connectionFile string) {
 	if v.GetString("dbConnectionString") != "" {
 		connection.dbConnectionString = v.GetString("dbConnectionString")
 	}
+
 	connection.username = v.GetString("username")
 	connection.password = v.GetString("password")
 	connection.hostname = v.GetString("hostname")
